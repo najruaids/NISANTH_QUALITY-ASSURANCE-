@@ -1,0 +1,53 @@
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int x) {
+        val = x;
+    }
+}
+
+class Codec {
+
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        helperSerialize(root, sb);
+        return sb.toString();
+    }
+
+    private void helperSerialize(TreeNode node, StringBuilder sb) {
+        if (node == null) {
+            sb.append("null,");
+            return;
+        }
+
+        sb.append(node.val).append(",");
+
+        helperSerialize(node.left, sb);
+        helperSerialize(node.right, sb);
+    }
+
+    public TreeNode deserialize(String data) {
+        String[] arr = data.split(",");
+        int[] index = new int[1]; // to move pointer
+        return helperDeserialize(arr, index);
+    }
+
+    private TreeNode helperDeserialize(String[] arr, int[] index) {
+
+        if (index[0] >= arr.length || arr[index[0]].equals("null")) {
+            index[0]++;
+            return null;
+        }
+
+        TreeNode node = new TreeNode(Integer.parseInt(arr[index[0]]));
+        index[0]++;
+
+        node.left = helperDeserialize(arr, index);
+        node.right = helperDeserialize(arr, index);
+
+        return node;
+    }
+}
